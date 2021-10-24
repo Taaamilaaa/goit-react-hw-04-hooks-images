@@ -18,12 +18,13 @@ function App() {
   const [bigImg, setBigImg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+    
 
   const formSubmitHandle = (value) => {
     setValue(value);
     setPage(1);
     setImages([]);
-
+    
     setIsLoading(true);
     pixabayFetch(value, page)
       .then((images) => {
@@ -38,10 +39,11 @@ function App() {
   const fetchImages = () => {
     setIsLoading(!isLoading);
 
-    pixabayFetch(value, page)
-      .then((images) => {
-        setImages((state) => [...state, ...images]);
-        setPage((prevState) => prevState + 1);
+    const nextPage = page + 1;
+    setPage(nextPage);
+    pixabayFetch(value, nextPage)
+      .then((images) => {        
+        setImages((state) => [...state, ...images]);        
       })
       .catch((error) =>
         error({
@@ -49,11 +51,11 @@ function App() {
           delay: 1000,
         })
       )
-      .finally(() => setIsLoading(!isLoading));
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    if (images) {
+    if (images.length > 12) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: "smooth",
@@ -70,6 +72,7 @@ function App() {
     setModalIsOpen(!modalIsOpen);
   };
 
+  
   return (
     <div className="Container">
       <Searchbar onSubmit={formSubmitHandle} />

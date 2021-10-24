@@ -17,6 +17,7 @@ export function Modal({ showModal, children }) {
   };
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line
   }, []);
 
    return createPortal(
