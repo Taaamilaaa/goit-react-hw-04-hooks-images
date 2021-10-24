@@ -18,13 +18,13 @@ function App() {
   const [bigImg, setBigImg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-    
+
 
   const formSubmitHandle = (value) => {
     setValue(value);
     setPage(1);
     setImages([]);
-    
+
     setIsLoading(true);
     pixabayFetch(value, page)
       .then((images) => {
@@ -37,13 +37,13 @@ function App() {
   };
 
   const fetchImages = () => {
-    setIsLoading(!isLoading);
+    setIsLoading(true);
 
     const nextPage = page + 1;
     setPage(nextPage);
     pixabayFetch(value, nextPage)
-      .then((images) => {        
-        setImages((state) => [...state, ...images]);        
+      .then((images) => {
+        setImages((state) => [...state, ...images]);
       })
       .catch((error) =>
         error({
@@ -62,17 +62,17 @@ function App() {
       });
     }
   }, [images]);
-  
+
   const imgBig = (img) => {
     setBigImg(img);
     toggleModal();
   };
-  
+
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
   };
 
-  
+
   return (
     <div className="Container">
       <Searchbar onSubmit={formSubmitHandle} />
