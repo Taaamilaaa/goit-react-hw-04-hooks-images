@@ -19,39 +19,21 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-
   const formSubmitHandle = (value) => {
-    setValue(value);    
+    setValue(value);
     setImages([]);
-    
-    const firstPage = 1;
-    setPage(firstPage);
-
-    setIsLoading(true);
-    pixabayFetch(value, page)
-      .then((images) => {
-        console.log(firstPage);       
-        setImages([...images]);
-       
-      })
-      .catch((error) =>
-        error("There are no images!!!")
-      )
-      .finally(() => setIsLoading(false));
+    setPage(1);
   };
 
-  const fetchImages = () => {
+  useEffect(() => {
+    if (!value) {
+      return;
+    }
     setIsLoading(true);
-
-    const nextPage = page + 1;
-    setPage(nextPage);
-
-    pixabayFetch(value, nextPage+1)
-      .then((images) => {
-        setImages((state) => [...state, ...images]);       
-        
-        console.log(nextPage);
-     
+    pixabayFetch(value, page)
+      .then((newImages) => {
+        setImages([...images, ...newImages]);
+        console.log(page);
       })
       .catch((error) =>
         error({
@@ -60,7 +42,8 @@ function App() {
         })
       )
       .finally(() => setIsLoading(false));
-  };
+    // eslint-disable-next-line
+  }, [page, value]);
 
   useEffect(() => {
     if (images.length > 12) {
@@ -71,6 +54,10 @@ function App() {
     }
   }, [images]);
 
+  const fetchImages = () => {
+    setPage(page + 1);
+  };
+
   const imgBig = (img) => {
     setBigImg(img);
     toggleModal();
@@ -79,7 +66,6 @@ function App() {
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
   };
-
 
   return (
     <div className="Container">
@@ -94,6 +80,6 @@ function App() {
       )}
     </div>
   );
-};
+}
 
 export default App;
