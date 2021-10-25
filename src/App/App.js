@@ -21,14 +21,18 @@ function App() {
 
 
   const formSubmitHandle = (value) => {
-    setValue(value);
-    setPage(1);
+    setValue(value);    
     setImages([]);
+    
+    const firstPage = 1;
+    setPage(firstPage);
 
     setIsLoading(true);
     pixabayFetch(value, page)
       .then((images) => {
+        console.log(firstPage);       
         setImages([...images]);
+       
       })
       .catch((error) =>
         error("There are no images!!!")
@@ -41,9 +45,13 @@ function App() {
 
     const nextPage = page + 1;
     setPage(nextPage);
-    pixabayFetch(value, nextPage)
+
+    pixabayFetch(value, nextPage+1)
       .then((images) => {
-        setImages((state) => [...state, ...images]);
+        setImages((state) => [...state, ...images]);       
+        
+        console.log(nextPage);
+     
       })
       .catch((error) =>
         error({
